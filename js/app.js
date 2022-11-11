@@ -1,29 +1,26 @@
 const { createApp } = Vue;
 
-createApp({
+createApp ({
     data(){
-        return{
-            title: 'Benvenuto Ajax',
-            numero: ''
+        return {
+            emailGenerated: [],
+            nEmail: 10,
+            isInLoading: false
         }
     },
-
-    methods:{
+    methods: {
         getApi(){
-            axios.get("https://flynn.boolean.careers/exercises/api/random/mail")
-            .then(risultato => {
-                console.log('Fine chiamata axios', risultato.data);
-                this.numero=risultato.data.response
-            })
-            .catch(erore => {
-                thisa.title = errore.code
-                console.log(errore.code);
-            })
+            this.isInLoading = true;
+            this.emailGenerated = [];
+            for(let i = 0; i < this.nEmail; i++) {
+                axios.get('https://flynn.boolean.careers/exercises/api/random/mail')
+                .then(email => {
+                    this.emailGenerated.push(email.data.response);
+                })
+            }
+        },
+        checkEmailGenerated(){
+            return this.emailGenerated.length == this.nEmail;
         }
-    },
-
-    mounted(){
-        this.getApi();
-        console.log('Log Axios');
     }
-}).mount("#app");
+}).mount('#app')
